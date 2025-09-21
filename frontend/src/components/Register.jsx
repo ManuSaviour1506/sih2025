@@ -1,35 +1,35 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext.jsx';
+import useAuth from '../hooks/useAuth.jsx'; // ✅ Corrected import path
 
 const Register = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     username: '',
+    email: '',
     password: ''
   });
+  const [message, setMessage] = useState('');
 
-  const { username, password } = formData;
+  const { username, email, password } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5001/api/auth/register', formData);
-      console.log('Registration successful:', res.data);
+      const res = await axios.post('http://localhost:5001/api/auth/register', { username, email, password });
       
-      // Call the login function from context
-      login(res.data.user, res.data.token);
+      login(res.data.token, res.data.user);
 
-      // Redirect to the dashboard after a successful registration
+      setMessage('Registration successful!');
       navigate('/dashboard'); 
     } catch (err) {
-      console.error(err.response.data);
-      alert(err.response.data.msg); 
+      console.error(err.response ? err.response.data : err.message);
+      setMessage(err.response ? err.response.data.msg : 'Registration failed. Please try again.');
     }
   };
 
@@ -43,6 +43,17 @@ const Register = () => {
             type="text"
             name="username"
             value={username}
+            onChange={e => onChange(e)}
+            required
+            className="w-full mt-2 p-2 border rounded-md"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={email}
             onChange={e => onChange(e)}
             required
             className="w-full mt-2 p-2 border rounded-md"
@@ -66,6 +77,7 @@ const Register = () => {
           Register
         </button>
       </form>
+      {message && <p className="mt-4 text-center text-sm text-red-600">{message}</p>}
     </div>
   );
 };

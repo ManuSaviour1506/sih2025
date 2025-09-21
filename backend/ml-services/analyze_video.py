@@ -38,7 +38,8 @@ def dispatch_analysis(video_path, test_type):
         'Sit Ups': 'situps.py',
         'Vertical Jump': 'verticaljump.py',
         'Shuttle Run': 'shuttlerun.py',
-        'Endurance Run': 'endurancerun.py'
+        'Endurance Run': 'endurancerun.py',
+        'Broad Jump': 'broadjump.py' # ✅ The newly added test
     }
 
     script_name = test_scripts.get(test_type)

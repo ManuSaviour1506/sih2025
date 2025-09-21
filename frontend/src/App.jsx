@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import useAuth from './hooks/useAuth';
+import useAuth from './hooks/useAuth.jsx'; // ✅ Corrected import path
+import './index.css';
 
-// All the components for routing
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
 import SAIDashboard from './components/SAIDashboard.jsx';
@@ -11,8 +11,7 @@ import Dashboard from './components/Dashboard.jsx';
 import AthleteProfile from './components/AthleteProfile.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Unauthorized from './components/Unauthorized.jsx';
-
-// Corrected import paths for all test components
+import LiveAnalyzer from './components/LiveAnalyzer.jsx';
 import VerticalJumpTest from './components/VerticalJumpTest.jsx';
 import SitUpsTest from './components/SitUpsTest.jsx';
 import BroadJumpTest from './components/BroadJumpTest.jsx';
@@ -38,6 +37,9 @@ const TestSelectionPage = () => {
                 </Link>
                 <Link to="/tests/endurancerun" className="p-6 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 transition text-center font-semibold">
                     Endurance Run
+                </Link>
+                <Link to="/tests/live-analyzer" className="p-6 text-white bg-purple-500 rounded-lg shadow-md hover:bg-purple-600 transition text-center font-semibold">
+                    Live Analysis
                 </Link>
             </div>
         </div>
@@ -75,7 +77,6 @@ const App = () => {
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
-                {/* Protected Routes for all authenticated users */}
                 <Route element={<PrivateRoute allowedRoles={['athlete', 'official']} />}>
                     <Route path="/" element={<TestSelectionPage />} />
                     <Route path="/tests/situps" element={<SitUpsTest />} />
@@ -83,11 +84,11 @@ const App = () => {
                     <Route path="/tests/broadjump" element={<BroadJumpTest />} />
                     <Route path="/tests/shuttlerun" element={<ShuttleRunTest />} />
                     <Route path="/tests/endurancerun" element={<EnduranceRunTest />} />
+                    <Route path="/tests/live-analyzer" element={<LiveAnalyzer />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/profile/:id" element={<AthleteProfile />} />
                 </Route>
 
-                {/* Official-only Route */}
                 <Route element={<PrivateRoute allowedRoles={['official']} />}>
                     <Route path="/sai-dashboard" element={<SAIDashboard />} />
                 </Route>
